@@ -1,0 +1,67 @@
+{% extends 'layouts/main.html' %}
+
+{% block content %}
+    <form action="" method="post">
+        <div class="form-group row">
+            {% csrf_token %}
+            <input type="search" name="statements" placeholder="search" id="" class="form-control col-8">
+            <input type="submit" value="search" class="btn btn-primary form-control col-4">
+        </div>
+    </form>
+
+    <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
+        <thead>
+        <tr role="row">
+            <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">نام
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">ایمیل
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">تلفن
+            </th>
+
+            <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">عملیات
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for user in users %}
+            <tr role="row" class="odd">
+                <td class="sorting_1">{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone }}</td>
+
+                <td>
+                    <a href="{% url 'single_users' user.id %}">مشاهده</a><span>   |   </span>
+                    <a href="{% url 'delete_users' user.id %}">حذف</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+
+    </table>
+    {% if users.has_other_pages %}
+        <ul class="pagination">
+            {% if users.has_previous %}
+                <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+                <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in users.paginator.page_range %}
+                {% if users.number == i %}
+                    <li class="active"><span class="">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li><a class="btn btn-primary" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if users.has_next %}
+                <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+            {% else %}
+                <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+
+{% endblock %}

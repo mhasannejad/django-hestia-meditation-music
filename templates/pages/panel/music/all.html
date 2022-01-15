@@ -1,0 +1,71 @@
+{% extends 'layouts/main.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <a href="{% url 'add_music' %}" class="btn btn-success">افزودن موسیقی</a>
+    </div>
+    <form action="" method="post">
+        <div class="form-group row">
+            {% csrf_token %}
+            <input type="search" name="statements" placeholder="search" id="" class="form-control col-8">
+            <input type="submit" value="search" class="btn btn-primary form-control col-4">
+        </div>
+    </form>
+
+    <table id="example2" class="table table-bordered table-hover dataTable" role="grid">
+        <thead>
+        <tr role="row">
+            <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">عنوان
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">گروه
+            </th>
+            <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">فایل
+            </th>
+            
+            <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1">عملیات
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for music in musics %}
+            <tr role="row" class="odd">
+                <td class="sorting_1">{{ music.title }}</td>
+                <td>{{ music.category.title }}</td>
+                <td><a href="{{ music.file.url }}">لینک</a></td>
+                
+                <td>
+                    <a href="{% url 'single_music' music.id %}">مشاهده</a><span>   |   </span>
+                    <a href="{% url 'delete_music' music.id %}">حذف</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+
+    </table>
+    {% if musics.has_other_pages %}
+        <ul class="pagination">
+            {% if musics.has_previous %}
+                <li><a href="?page={{ musics.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+                <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in musics.paginator.page_range %}
+                {% if musics.number == i %}
+                    <li class="active"><span class="">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li><a class="btn btn-primary" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if musics.has_next %}
+                <li><a href="?page={{ musics.next_page_number }}">&raquo;</a></li>
+            {% else %}
+                <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'layouts/main.html' %}
+
+{% block content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ timeofday_form }}
+
+        <input type="submit" value="آپدیت" class="btn btn-primary">
+    </form>
+{% endblock %}
